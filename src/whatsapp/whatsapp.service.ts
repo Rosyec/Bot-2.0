@@ -64,7 +64,7 @@ export class WhatsappService {
     );
   }
 
-  async sendQuickButtonMessage(to: string) {
+  async sendQuickButtonMessage(to: string, text: string) {
     return axios.post(
       `${this.apiUrl}/${this.phoneNumberId}/messages`,
       {
@@ -74,19 +74,13 @@ export class WhatsappService {
         interactive: {
           type: 'button',
           body: {
-            text: `🎶✨ ¡Hola! ¡Bienvenid@ al Festival Estéreo Picnic junto con Domino’s Pizza! 🎡🎤🍕
-
-Estamos aquí para asegurarnos de que disfrutes al máximo esta increíble experiencia llena de música, buena vibra y, por supuesto, ¡deliciosa pizza! 🎧🔥🍕
-
-🔍 ¿En qué podemos ayudarte hoy? 
-
-Elige una opción:`,
+            text,
           },
           action: {
             buttons: [
               {
                 type: 'reply',
-                reply: { id: 'btn1', title: '1️⃣ Quiero mi video' },
+                reply: { id: 'btn1', title: '1️⃣ Aceptar' },
               },
               // { type: 'reply', reply: { id: 'btn2', title: '2️⃣ Cancelar' } },
             ],

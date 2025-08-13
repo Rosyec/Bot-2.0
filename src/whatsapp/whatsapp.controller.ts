@@ -43,15 +43,17 @@ export class WhatsappController {
 
   private async handleMessage(message: any) {
     const from: string = message.from;
-    const text = message.text?.body;
+    const text = message.text?.body as string;
 
     console.log(`Nuevo mensaje de ${from}: ${text}`);
 
     const phone: string = from.replaceAll('57', '');
 
     if (message.type === 'text') {
-      // await this.handleMessage(message);
-      await this.whatsappService.sendQuickButtonMessage(from);
+      if (text.includes("hola")) {
+        const customText = "Hola, bienvenido. Que puedo hacer por ti?"
+        await this.whatsappService.sendQuickButtonMessage(from, customText);
+      }
     }
 
     if (message.type == 'interactive') {
