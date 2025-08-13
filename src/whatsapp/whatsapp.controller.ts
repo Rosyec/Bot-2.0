@@ -2,14 +2,12 @@ import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WhatsappService } from './whatsapp.service';
 import { Response } from 'express';
-import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Controller('whatsapp')
 export class WhatsappController {
   constructor(
     private readonly configService: ConfigService,
     private whatsappService: WhatsappService,
-    private firebaseService: FirebaseService,
   ) { }
 
   @Get()
@@ -35,10 +33,8 @@ export class WhatsappController {
       const entry = body.entry?.[0];
       const changes = entry?.changes?.[0];
       const message = changes?.value?.messages?.[0];
-
       if (message) {
         await this.handleMessage(message);
-        // console.log('RESPONSE: ', message);
       }
     }
 
@@ -53,9 +49,6 @@ export class WhatsappController {
 
     const phone: string = from.replaceAll('57', '');
 
-    const data = await this.firebaseService.searchGifByUser(phone);
-    console.log('USER: ', data);
-
     if (message.type === 'text') {
       // await this.handleMessage(message);
       await this.whatsappService.sendQuickButtonMessage(from);
@@ -64,16 +57,16 @@ export class WhatsappController {
     if (message.type == 'interactive') {
       if (message.interactive.type == 'button_reply') {
         if (message.interactive.button_reply.id == 'btn1') {
-          if (data !== undefined) {
-            console.log('RESPONSE: ', message);
-            console.log('PHONE: ', from);
-            const captions = `¡Hola nuevamente`;
-            await this.whatsappService.sendImageMessage(
-              from,
-              data.url,
-              captions,
-            );
-          }
+          // if (data !== undefined) {
+          //   console.log('RESPONSE: ', message);
+          //   console.log('PHONE: ', from);
+          //   const captions = `¡Hola nuevamente`;
+          //   await this.whatsappService.sendImageMessage(
+          //     from,
+          //     data.url,
+          //     captions,
+          //   );
+          // }
         }
       }
     }
